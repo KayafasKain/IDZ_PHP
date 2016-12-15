@@ -82,9 +82,14 @@ class NewsController extends \yii\web\Controller
         ]);
 
 
+        $categoryDataProvider = new ActiveDataProvider([
+            'query' => Categories::find()->orderBy('name'),
+            'pagination' => false
+        ]);  
+
         if (empty($dataProvider)) throw new HttpException(404, 'Not found!');
 
-        return $this->render('showcat', ['dataProvider' => $dataProvider ]);    	
+        return $this->render('showcat', ['dataProvider' => $dataProvider, 'categoryDataProvider' => $categoryDataProvider ]);    	
     }  
 
 }

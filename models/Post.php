@@ -41,9 +41,10 @@ class Post extends \yii\db\ActiveRecord
         return [
             [['title', 'overwiew_txt', 'full_txt', 'category_id', 'user_id', 'status'], 'required'],
             [['status', 'category_id', 'user_id'], 'integer'],
-            [['change_date'], 'safe'],
+            [['change_date', 'full_txt', 'overwiew_txt'], 'safe'],
             [['video_link'], 'match', 'pattern' => '/v=[A-z0-999]*/'],
-            [['title', 'overwiew_txt', 'full_txt', 'img_link', 'video_link'], 'string', 'max' => 255],
+            [['title','img_link', 'video_link'], 'string', 'max' => 255],
+            [['overwiew_txt'], 'string', 'max' => 500],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['image'], 'image', 'extensions' => 'png, jpg'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],

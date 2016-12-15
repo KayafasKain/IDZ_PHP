@@ -7,6 +7,7 @@ use app\models\Categories;
 use app\models\CategoriesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\MethodNotAllowedHttpException;
 use yii\filters\VerbFilter;
 
 
@@ -30,6 +31,10 @@ class CategoriesController extends \yii\web\Controller
         $searchModel = new CategoriesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -38,6 +43,11 @@ class CategoriesController extends \yii\web\Controller
 
     public function actionView($id)
     {
+
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -46,6 +56,10 @@ class CategoriesController extends \yii\web\Controller
     public function actionCreate()
     {
         $model = new Categories();
+
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -60,6 +74,10 @@ class CategoriesController extends \yii\web\Controller
     {
         $model = $this->findModel($id);
 
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -71,6 +89,11 @@ class CategoriesController extends \yii\web\Controller
 
     public function actionDelete($id)
     {
+
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

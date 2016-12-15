@@ -39,6 +39,10 @@ class PostController extends Controller
         $searchModel = new PostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -52,6 +56,11 @@ class PostController extends Controller
      */
     public function actionView($id)
     {
+
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -66,6 +75,9 @@ class PostController extends Controller
     {
         $model = new Post();
 
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
@@ -95,6 +107,11 @@ class PostController extends Controller
      */
     public function actionUpdate($id)
     {
+
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -124,6 +141,11 @@ class PostController extends Controller
      */
     public function actionDelete($id)
     {
+
+        if( Yii::$app->user->isGuest ){
+            throw new MethodNotAllowedHttpException('Please register or log in!');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
