@@ -79,7 +79,7 @@ class PostController extends Controller
             throw new MethodNotAllowedHttpException('Please register or log in!');
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
 
             $image = rand(rand(),rand()).rand(rand(),rand()).rand(rand(),rand()).Yii::$app->user->identity->getId();
 
@@ -87,10 +87,12 @@ class PostController extends Controller
             if (!empty($model->image)) {
                 $model->image->saveAs('upload/images/perviews/' . $image . '.' . $model->image->extension);
                 $model->img_link = 'upload/images/perviews/' . $image . '.' . $model->image->extension;
-                $model->save(false);
             }
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            if( $model->save(false) ){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -116,11 +118,16 @@ class PostController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-
+            ///IDZ/web/
             $image = rand(rand(),rand()).rand(rand(),rand()).rand(rand(),rand()).Yii::$app->user->identity->getId();
 
             $model->image = UploadedFile::getInstance($model, 'image');
             if (!empty($model->image)) {
+
+                if(!empty($model->img_link)){
+                    unlink(Yii::getAlias('@webroot')."/".$model->img_link);
+                }
+
                 $model->image->saveAs('upload/images/perviews/' . $image . '.' . $model->image->extension);
                 $model->img_link = 'upload/images/perviews/' . $image . '.' . $model->image->extension;
                 $model->save(false);
@@ -144,11 +151,20 @@ class PostController extends Controller
 
         if( Yii::$app->user->isGuest ){
             throw new MethodNotAllowedHttpException('Please register or log in!');
+        }else{
+
+            $model = $this->findModel($id); 
+
+            if (!empty($model->img_link)){
+                unlink(Yii::getAlias('@webroot')."/".$model->img_link);
+            }
+            $model->delete();
+
+            return $this->redirect(['index']);
+                
         }
 
-        $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
     }
 
     /**

@@ -46,7 +46,7 @@ class Post extends \yii\db\ActiveRecord
             [['title','img_link', 'video_link'], 'string', 'max' => 255],
             [['overwiew_txt'], 'string', 'max' => 500],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['category_id' => 'id']],
-            [['image'], 'image', 'extensions' => 'png, jpg'],
+            [['image'], 'file', 'extensions' => 'png, jpg'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
 
         ];

@@ -160,3 +160,7 @@ a.desc:after {
     padding-bottom: 50px; 
 }
 
+.newscont{
+    min-height: 350px!important;
+}
+
